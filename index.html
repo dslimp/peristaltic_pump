@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html>
+     <head>
+     <meta name="viewport" content="width=device-width, initial-scale=1"/>
+     <meta charset="utf-8" />
+     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+     <style>
+.modal-header, h4, .close {
+	background-color: #5cb85c;
+	color: white !important;
+	text-align: center;
+	font-size: 30px;
+}
+.modal-footer {
+	background-color: #f9f9f9;
+}
+		 .custom-switch {}
+		 .custom-switch {}	 
+		 {tab-size: 45}
+;
+</style>
+<script>
+	var CurrentProcess=0;
+	var CurrentProcessProgress=0;	
+	var ProcessNames=["Процессы остановлены","Постоянная подача","Дозировка","Калибровка"];
+	
+function updateVisibles() {
+	$("#CurrentProccesName").text(ProcessNames[CurrentProcess]);
+	if (CurrentProcess>0) {
+		
+		$.get({type: "POST", url: "/",data: {cmd:"GetCurrentProcessProgress"},success: function(response) {	
+			if (CurrentProcess==2) { 
+				$("#ProgressBarDoze").css("width", response + "%").attr("aria-valuenow", response).text(response + "%");	
+				//CurrentProcessProgress=response; 
+						   }}
+			  });
+			}
+		$.get({type: "POST", url: "/",data: {cmd:"GetCurrentProcess"},success: function(response) { CurrentProcess=response; }});
+	};	
+	var ProcessTimerId = setInterval(function() { updateVisibles(); }, 1200000);
+	 </script>
+     <title>Peritaltic pump</title>
+</head>
+<body>
+<div class="container">
+       <div class="row">
+    <div class="col-md-12">
+           <h1>Peristaltic Pump v0.04</h1>
+         </div>
+  </div>
+	
+       <nav class="navbar navbar-dark navbar-expand-lg bg-dark">
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+           <ul class="navbar-nav mr-auto">
+        <li class="nav-item active"> <a class="nav-link" href="/">Домой <span class="sr-only">(current)</span></a> </li>
+        <li class="nav-item"> <a class="nav-link" href="#" id="btnPump">Насос</a> </li>
+        <li class="nav-item dropdown"> <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Настройки </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown"> <a class="dropdown-item" href="#"  id="BtnSettings">Насос</a> <a class="dropdown-item disabled" href="#"  id="Btn123">Первичная перегонка</a> 
+               <a class="dropdown-item disabled" href="#"  id="Btn143">Дистилляция</a> 
+               <a class="dropdown-item" href="#"  id="btnNBK">НБК</a> 
+               <a class="dropdown-item" href="#"  id="btnCalibrate">Калибровка</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item disabled" href="#">Прошивка</a>
+			</div>
+                   <li class="nav-item"> <a class="nav-link" href="#" id="btnUpdateIndex">Обновить индекс</a> </li>
+            </li>
+      </ul>
+		<div class="navbar navbar-dark bg-dark justify-content-between">
+		   <ul class="navbar-nav mr-auto">
+			<li class="nav-item"> 
+		     <div class="custom-control custom-switch">
+   	 		  <input type="checkbox" class="custom-control-input" id="customSwitches3">
+		      <label class="custom-control-label nav-link" for="customSwitches3">Заблокировать управление</label>
+  			 </div>
+			</li>
+			 </ul>
+		   </div>
+		</div>
+  </nav>
+       <br>
+	
+	<div class="row">
+		<div class="col-md-12">
+			<h2>Текущий режим:</h2><h2 id="CurrentProccesName"></h2>
+		</div>
+	</div>
+	
+	<hr>
+	<div class="row">
+		<div class="col-md-12">
+			<ul class="nav nav-tabs" id="myTab" role="tablist">
+				<li class="nav-item"> <a class="nav-link" id="home-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="home" >Текущий процесс</a> </li>
+				<li class="nav-item"> <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Насос</a> </li>
+				<li class="nav-item"  aria-selected="true"> 
+					<a class="nav-link active" id="doze-tab" data-toggle="tab" href="#doze" role="tab" aria-controls="doze"  aria-selected="true">Дозировка</a> 
+				</li>
+				<li class="nav-item"> 
+					<a class="nav-link disabled" id="nbk-tab" data-toggle="tab" href="#tabnbk" role="tab" aria-controls="contact" aria-selected="false">НБК</a> 
+				</li>
+				<li class="nav-item"> 
+					<a class="nav-link disabled" id="dist-tab" data-toggle="tab" href="#tabdist" role="tab" aria-controls="contact" aria-selected="false">Дистилляция</a> 
+				</li>
+				<li class="nav-item"> 
+					<a class="nav-link disabled" id="rect-tab" data-toggle="tab" href="#tabrect" role="tab" aria-controls="contact" aria-selected="false">Ректификация</a> 
+				</li>			
+				<li class="nav-item"> 
+					<a class="nav-link disabled" id="grain-tab" data-toggle="tab" href="#tabdist" role="tab" aria-controls="contact" aria-selected="false">Затор</a> 
+				</li>			
+				<li class="nav-item"> 
+					<a class="nav-link disabled" id="distil-tab" data-toggle="tab" href="#tabnbk" role="tab" aria-controls="contact" aria-selected="false">Первичная перегонка</a> 
+				</li>				
+			  </ul>
+				<div class="tab-content" id="myTabContent">
+				<div class="tab-pane fade" id="home" role="tabpanel" aria-labelledby="home-tab">.cont1..</div>
+				<div class="tab-pane fade  show active" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+					<div>
+				<table width="100%">
+				 <tr>
+					<td>
+					<table>
+						<tr>
+							<td>
+								Подача, л/ч
+							</td>
+							<td>
+								<h3>$PUMPSPEEDL</h3>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								Лимит объема, л
+							</td>
+							<td>
+								<h3>$LIMITCAPACITY</h3>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								Лимит времени, ч
+							</td>
+							<td>
+								<h3>$LIMITHOUR</h3>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								Насос включен
+							</td>
+							<td>									
+								       <div class="custom-control custom-switch">
+										<input type="checkbox" class="custom-control-input" id="PUMPENABLED" $PUMPENABLED name="PUMPENABLED">
+										<label class="custom-control-label" for="PUMPENABLED"></label>			
+									  </div>					
+							</td>
+						</tr>				
+					</table>
+						</td>
+					 	<td>
+							Вторая колонка
+					 	</td>
+					 </tr>
+				</table>					
+						</div>
+				</div>
+				<hr>
+				<div class="tab-pane fade" id="doze" role="tabpanel" aria-labelledby="doze-tab">
+				  <form action="/" method="POST" id="formDoze">
+				  <input type="hidden" name="cmd" value="2">
+				  <div class="row">
+    				<div class="col-md-2">
+					<span class="input-group-text" id="inputGroup-sizing-sm">Объем</span>
+					  </div>
+					<div class="col-md-2">
+					<input name="LIMITDOZE" type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" value="$LIMITDOZE">
+				  	
+					  </div>
+					  <div class="col-md-2">
+
+						<select  class="form-control" id="doze-capacity">
+							<option value="1" selected>Миллилитры</option>
+							<option value="2">Литры</option>
+						</select>
+					  </div>
+					  
+					  <div class="col-md-2">	
+					  	   <button type="button" class="btn btn-success" id="btnDozeStart">Применить</button>				  
+					  </div>
+					</div>
+					<hr>
+					<div class="row">
+						<div class="col-md-12">
+							<div class="progress">
+ 							 <div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="1" aria-valuemin="0" aria-valuemax="100" id="ProgressBarDoze">1%</div>
+							</div>
+						</div>
+					</div>
+				  </form>
+				</div>
+			  </div>
+         </div>
+	</div>
+       <hr />
+
+       <div class="modal fade" id="ModalPump" role="dialog">
+    <div class="modal-dialog"> 
+           <div class="modal-content">
+        <div class="modal-header" style="padding:15px 15px;">
+               <button type="button" class="close" data-dismiss="modal">&times;</button>
+               <h4><span class="glyphicon glyphicon-lock"></span> Подача</h4>
+             </div>
+        <div class="modal-body" style="padding:30px 40px;">
+               <div class="form-group">
+            <form role="form"  action="/" method="POST"  oninput="waterspeedoutput.value = PUMPSPEEDL.valueAsNumber" id="pumpform">
+                   <input type="hidden" value="1" name="PUMPCONFIG">
+                   <label>Установленнная скорость подачи, литров в час</label>
+                   <mark>$PUMPSPEEDL</mark>
+                   <br />
+                   <label for="waterspeed">Новая скорость подачи, литров в час</label>
+                   <mark>
+                <output name="waterspeedoutput" for="PUMPSPEEDL">$PUMPSPEEDL</output>
+              </mark>
+                   <br />
+                   <input name="PUMPSPEEDL" type="range" class="custom-range" id="PUMPSPEEDL" min="0" max="60" value="$PUMPSPEEDL">
+                   <br />
+                   <hr>
+                   <div class="checkbox">
+                <label>
+                       <input type="checkbox"  value="$ENABLELIMITCAPACITY" name="ENABLELIMITCAPACITY" id="ENABLELIMITCAPACITY">
+                       Включить лимит объема</label>
+              </div>
+                   <input type="text" class="form-control" id="LIMITCAPACITY" placeholder="Ввести максимальный объем" value="$LIMITCAPACITY" name="LIMITCAPACITY">
+                   <div class="checkbox">
+                <label>
+                       <input type="checkbox" value="$ENABLELIMITHOUR" id="ENABLELIMITHOUR" name="ENABLELIMITHOUR">
+                       Включить лимит по времени</label>
+              </div>
+                   <input type="text" class="form-control" id="LIMITHOUR" placeholder="Ввести максимальное время в часах" name="LIMITHOUR" value="$LIMITHOUR">
+                 </form>
+          </div>
+             </div>
+        <div class="modal-footer">
+               <button id="btnAjaxPump" class="btn btn-success  pull-left" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Применить</button>
+               <button type="submit" class="btn btn-danger  pull-left" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span>Отмена</button>
+             </div>
+      </div>
+         </div>
+  </div>
+    
+    
+     
+    <div class="modal fade" id="modalCalibrate" role="dialog">
+    <div class="modal-dialog"> 
+           <div class="modal-content">
+        <div class="modal-header" style="padding:15px 15px;">
+               <button type="button" class="close" data-dismiss="modal">&times;</button>
+               <h4><span class="glyphicon glyphicon-lock"></span> Калибровка</h4>
+             </div>
+        <div class="modal-body" style="padding:30px 40px;">
+               <div class="form-group">
+            <form role="form"  action="/" method="POST" id="formCalibrate">
+               <input type="hidden" name="cmd" value="3">
+               <button id="btnCalibrateStart" class="btn btn-success pull-left" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Запустить</button>
+               <button type="submit" class="btn btn-danger  pull-left" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span>Отмена</button>
+				   </form>
+             </div>
+      </div>
+         </div>
+  </div>
+     </div>
+         
+       <div class="modal fade" id="SettingsModal" role="dialog">
+    <div class="modal-dialog">
+           <div class="modal-content">
+        <div class="modal-header" style="padding:35px 50px;">
+               <button type="button" class="close" data-dismiss="modal">&times;</button>
+               <h4><span class="glyphicon glyphicon-lock"></span> Настройки</h4>
+             </div>
+        <div class="modal-body" style="padding:40px 50px;">
+               <div class="form-group">
+            <form role="form"  action="/" method="POST" oninput="waterspeedoutput.value = waterspeed.valueAsNumber">
+                   <label for="STEPML"> Шагов на миллилитр</label>
+                   <input type="text" class="form-control" id="STEPML" value="$STEPML">
+                   <label for="MAXSTEPPERSECOND">Максимальная скорость, шагов в секунду</label>
+                   <input type="text" class="form-control" id="MAXSTEPPERSECOND"  value="$MAXSTEPPERSECOND">
+                   <label for="ACCELERATION">Ускорение</label>
+                   <input type="text" class="form-control" id="ACCELERATION"  value="$ACCELERATION">
+                   <label for="WATERMLCALIBRATE">Объем для калибровки, мл</label>
+                   <input type="text" class="form-control" id="WATERMLCALIBRATE"  value="$WATERMLCALIBRATE">
+                   <label for="ssid">Имя точки доступа Wi-Fi</label>
+                   <input type="text" class="form-control" id="ssid"  value="$ssid">
+                   <label for="password">Пароль Wi-Fi</label>
+                   <input type="text" class="form-control" id="password"  value="$password">
+                 </form>
+          </div>
+             </div>
+        <div class="modal-footer">
+               <button type="submit" class="btn btn-submit btn-default pull-left" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Применить</button>
+               <button type="submit" class="btn btn-danger btn-default pull-left" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Отменить</button>
+             </div>
+      </div>
+         </div>
+  </div>
+     </div>
+<script>
+	$(document).ready(function(){ $("#btnPump").click(function(){ $("#ModalPump").modal();  }); }); 
+	$(document).ready(function(){ $("#BtnSettings").click(function(){ $("#SettingsModal").modal();  }); }); 
+	$(document).ready(function(){ $("#BtnSettings").click(function(){ $("#SettingsModal").modal(); }) } );
+	$(document).ready(function(){ $("#btnCalibrate").click(function(){ $("#modalCalibrate").modal(); });
+	$(document).ready(function(){ updateVisibles(); } );						 
+		$(document).ready(function(){ $("#btnCalibrateStart").click(function(){ 
+			$.post("/",$("#formCalibrate").serialize())}
+		)} );					 
+		$("#PUMPENABLED").click(function(){ $.get("/", {EnablePUMPWeb: $("#PUMPENABLED").prop("checked") ? 1:0 }); });	
+								 
+			$("#btnAjaxPump").click(function(){ $.post("/",$("#pumpform").serialize())});		
+								 
+			$("#btnDozeStart").click(function(){ $.post("/",$("#formDoze").serialize())});	
+			$("#btnUpdateIndex").click(function(){ 
+				$.get({type: "POST", url: "/",data: {cmd: "UpdateIndex"},success: function() {   }});							
+												 
+												 });	
+								 
+								 
+								
+		
+	});
+  </script>
+</body>
+</html>
