@@ -17,6 +17,8 @@ jobs:
       run: ls -l bin/
     - name: lib
       run: ./bin/arduino-cli core update-index --additional-urls http://arduino.esp8266.com/stable/package_esp8266com_index.json
+    - name: update index
+      run: ./bin/arduino-cli core update-index     
     - name: install board
       run:  ./bin/arduino-cli core install esp8266:esp8266  
     - name: compile
