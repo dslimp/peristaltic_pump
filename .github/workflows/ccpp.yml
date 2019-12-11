@@ -1,0 +1,17 @@
+name: C/C++ CI
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-18.04
+    
+    steps:
+    - uses: actions/checkout@v1
+    - name: install
+      run:  curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | sh
+    - name: lib
+      run: arduino-cli core update-index --additional-urls http://arduino.esp8266.com/stable/package_esp8266com_index.json
+    - name: compile
+      run: arduino-cli compile --fqbn arduino:esp8266:esp826 MyFirstSketch
