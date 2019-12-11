@@ -18,6 +18,6 @@ jobs:
     - name: lib
       run: ./bin/arduino-cli core update-index --additional-urls http://arduino.esp8266.com/stable/package_esp8266com_index.json
     - name: install board
-      run:  ./bin/arduino-cli core install arduino:esp8266  
+      run:  ./bin/arduino-cli core install esp8266:esp8266  
     - name: compile
-      run: ./bin/arduino-cli compile --fqbn arduino:esp8266 MyFirstSketch
+      run: ./bin/arduino-cli compile --fqbn esp8266:esp8266 MyFirstSketch
