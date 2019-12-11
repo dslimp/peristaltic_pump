@@ -25,3 +25,7 @@ jobs:
       run: sudo apt-get install -yq python3
     - name: compile
       run: ./bin/arduino-cli compile --fqbn esp8266:esp8266:d1 MyFirstSketch
+    - uses: actions/upload-artifact@v1
+      with:
+        name: esp8266.bin
+        path: MyFirstSketch/MyFirstSketch.esp8266.esp8266.d1.bin 
