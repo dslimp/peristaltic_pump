@@ -13,6 +13,8 @@ jobs:
       run:  curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | sh
     - name: ls
       run: ls -l  
+    - name: ls bin
+      run: ls -l bin/
     - name: lib
       run: ./arduino-cli core update-index --additional-urls http://arduino.esp8266.com/stable/package_esp8266com_index.json
     - name: compile
