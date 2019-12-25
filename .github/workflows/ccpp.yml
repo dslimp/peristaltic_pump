@@ -1,22 +1,16 @@
-name: C/C++ CI
-
+name: Arduino compile
 on: [push]
-
 jobs:
   build:
-
     runs-on: ubuntu-18.04
-    
     steps:
     - uses: actions/checkout@v1
-    - name: install
+    - name: install arduino cli
       run:  curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | sh
-    - name: ls
-      run: ls -l  
-    - name: ls bin
-      run: ls -l bin/
-    - name: makesketch
+    - name: MakeSketch
       run: ./bin/arduino-cli sketch new MyFirstSketch
+    - name: lib
+      run: ./bin/arduino-cli core update-index --additional-urls http://arduino.esp8266.com/stable/package_esp8266com_index.json
     - name: install esp8266
       run: ./bin/arduino-cli core install esp8266:esp8266 --additional-urls http://arduino.esp8266.com/stable/package_esp8266com_index.json  
     - name: install python3
