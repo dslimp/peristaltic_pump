@@ -14,11 +14,11 @@ jobs:
     - name: lib init
       run: sudo ./bin/arduino-cli core update-index --additional-urls http://arduino.esp8266.com/stable/package_esp8266com_index.json
     - name: install esp8266
-      run: ./bin/arduino-cli core install esp8266:esp8266 --additional-urls http://arduino.esp8266.com/stable/package_esp8266com_index.json  
+      run: sudo ./bin/arduino-cli core install esp8266:esp8266 --additional-urls http://arduino.esp8266.com/stable/package_esp8266com_index.json  
     - name: install python3
       run: sudo apt-get install -yq python3
     - name: compile
-      run: ./bin/arduino-cli compile --fqbn esp8266:esp8266:d1 MyFirstSketch
+      run: sudo ./bin/arduino-cli compile --fqbn esp8266:esp8266:d1 MyFirstSketch
     - uses: actions/upload-artifact@v1
       with:
         name: esp8266-d1-mini-4m.bin
