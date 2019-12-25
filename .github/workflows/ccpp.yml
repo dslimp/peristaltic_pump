@@ -17,8 +17,6 @@ jobs:
       run: ls -l bin/
     - name: makesketch
       run: ./bin/arduino-cli sketch new MyFirstSketch
-    - name: lib
-      run: ./bin/arduino-cli core update-index --additional-urls http://arduino.esp8266.com/stable/package_esp8266com_index.json
     - name: install esp8266
       run: ./bin/arduino-cli core install esp8266:esp8266 --additional-urls http://arduino.esp8266.com/stable/package_esp8266com_index.json  
     - name: install python3
